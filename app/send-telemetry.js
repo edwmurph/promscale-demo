@@ -1,5 +1,9 @@
 const axios = require('axios');
 
+let triggerAlert = true;
+
+setInterval( () => triggerAlert = !triggerAlert, 60e3 * 2 );
+
 const jitter = 20;
 
 const promscales = [
@@ -23,7 +27,7 @@ const sendTelemetry = async() => {
           test: 'a'
         },
         samples: [
-          [ new Date().getTime(), 100 + slop ]
+          [ new Date().getTime(), 100 + slop + (triggerAlert ? 50 : -50) ]
         ]
       },
       headers: {

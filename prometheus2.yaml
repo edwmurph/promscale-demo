@@ -2,6 +2,9 @@ global:
   scrape_interval:     15s
   evaluation_interval: 15s
 
+rule_files:
+  - prometheus.rules.yaml
+
 remote_write:
   - url: http://promscale2:9201/write
 remote_read:

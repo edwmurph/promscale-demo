@@ -16,6 +16,7 @@ services:
       - 9091:9090/tcp
     volumes:
       - ./prometheus1.yaml:/etc/prometheus/prometheus.yml
+      - ./prometheus.rules.yaml:/etc/prometheus/prometheus.rules.yaml
 
   prometheus2:
     image: prom/prometheus:v2.26.0
@@ -23,6 +24,7 @@ services:
       - 9092:9090/tcp
     volumes:
       - ./prometheus2.yaml:/etc/prometheus/prometheus.yml
+      - ./prometheus.rules.yaml:/etc/prometheus/prometheus.rules.yaml
 
   promscale1:
     image: timescale/promscale:0.3.0

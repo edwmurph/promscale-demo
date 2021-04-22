@@ -1,0 +1,17 @@
+groups:
+  - name: prometheus.rules
+    rules:
+      - alert: custom_metric_scraped_high
+        expr: custom_metric_scraped > 100
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          message: custom pushed metric is high
+      - alert: custom_metric_pushed_high
+        expr: custom_metric_pushed > 100
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          message: custom pushed metric is high
