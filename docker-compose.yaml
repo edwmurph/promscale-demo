@@ -1,4 +1,4 @@
-version: '3.0'
+version: '3.7'
 
 services:
   db:
@@ -28,6 +28,7 @@ services:
 
   promscale1:
     image: timescale/promscale:0.3.0
+    command: -enable-ha=true
     ports:
       - 9201:9201/tcp
     restart: on-failure
@@ -39,6 +40,7 @@ services:
 
   promscale2:
     image: timescale/promscale:0.3.0
+    command: -enable-ha=true
     ports:
       - 9202:9201/tcp
     restart: on-failure
