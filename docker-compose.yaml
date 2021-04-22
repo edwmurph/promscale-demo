@@ -13,9 +13,16 @@ services:
   prometheus1:
     image: prom/prometheus:v2.26.0
     ports:
-      - 9090:9090/tcp
+      - 9091:9090/tcp
     volumes:
       - ./prometheus1.yaml:/etc/prometheus/prometheus.yml
+
+  prometheus2:
+    image: prom/prometheus:v2.26.0
+    ports:
+      - 9092:9090/tcp
+    volumes:
+      - ./prometheus2.yaml:/etc/prometheus/prometheus.yml
 
   promscale1:
     image: timescale/promscale:0.3.0
@@ -25,12 +32,19 @@ services:
     depends_on:
       - db
       - prometheus1
-    environment:
-      PROMSCALE_WEB_TELEMETRY_PATH: /metrics-text
-      PROMSCALE_DB_CONNECT_RETRIES: 10
-      PROMSCALE_DB_HOST: db
-      PROMSCALE_DB_PASSWORD: postgres
-      PROMSCALE_DB_SSL_MODE: allow
+    env_file:
+      - promscale-compose.env
+
+  promscale2:
+    image: timescale/promscale:0.3.0
+    ports:
+      - 9202:9201/tcp
+    restart: on-failure
+    depends_on:
+      - db
+      - prometheus2
+    env_file:
+      - promscale-compose.env
 
   app:
     image: app
