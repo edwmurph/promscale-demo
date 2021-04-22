@@ -1,0 +1,40 @@
+version: '3.0'
+
+services:
+  db:
+    image: timescaledev/promscale-extension:0.1.2-ts2-pg12
+    ports:
+      - 5432:5432/tcp
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: timescale
+
+  prometheus1:
+    image: prom/prometheus:v2.26.0
+    ports:
+      - 9090:9090/tcp
+    volumes:
+      - ./prometheus1.yaml:/etc/prometheus/prometheus.yml
+
+  promscale1:
+    image: timescale/promscale:0.3.0
+    ports:
+      - 9201:9201/tcp
+    restart: on-failure
+    depends_on:
+      - db
+      - prometheus1
+    environment:
+      PROMSCALE_WEB_TELEMETRY_PATH: /metrics-text
+      PROMSCALE_DB_CONNECT_RETRIES: 10
+      PROMSCALE_DB_HOST: db
+      PROMSCALE_DB_PASSWORD: postgres
+      PROMSCALE_DB_SSL_MODE: allow
+
+  app:
+    image: app
+    build:
+      context: ./app
+    ports:
+      - 3000:3000/tcp
