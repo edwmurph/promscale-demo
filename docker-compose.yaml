@@ -48,9 +48,19 @@ services:
     env_file:
       - promscale-compose.env
 
+  grafana:
+    image: grafana/grafana:7.3.1
+    restart: always
+    init: true
+    ports:
+      - 3000:3000/tcp
+    volumes:
+      - ./grafana/grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/custom.ini:/etc/grafana/grafana.ini
+
   app:
-    image: app
     build:
       context: ./app
     ports:
-      - 3000:3000/tcp
+      - 8080:8080/tcp
